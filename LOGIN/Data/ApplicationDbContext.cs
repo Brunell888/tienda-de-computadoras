@@ -37,7 +37,7 @@ namespace LOGIN.Data
                 entity.Property(e => e.Descripcion).HasMaxLength(500);
                 entity.Property(e => e.Cantidad).IsRequired();
                 entity.Property(e => e.Precio).HasPrecision(18, 2);
-                entity.Property(e => e.FechaRegistro).HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.FechaRegistro).HasDefaultValueSql("NOW()");
             });
         }
     }
