@@ -65,7 +65,7 @@ namespace LOGIN.Controllers
                     return View(usuario);
                 }
 
-                usuario.FechaRegistro = DateTime.Now;
+                usuario.FechaRegistro = DateTime.UtcNow;
                 _context.Usuarios.Add(usuario);
                 await _context.SaveChangesAsync();
 
