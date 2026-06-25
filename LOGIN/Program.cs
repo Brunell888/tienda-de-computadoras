@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using LOGIN.Data;
 
+AppContext.SetSwitch("System.Net.DisableIPv6", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Agregar controladores MVC (vistas) y API controllers
