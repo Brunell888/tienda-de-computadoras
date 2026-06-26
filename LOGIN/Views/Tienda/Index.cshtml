@@ -1,0 +1,40 @@
+@model IEnumerable<LOGIN.Models.Producto>
+@{
+    ViewData["Title"] = "Tienda";
+}
+
+<h2 class="my-4">🛒 Catálogo de Productos</h2>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var p in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@p.Nombre</h5>
+                    <p class="card-text text-muted">@p.Descripcion</p>
+                    <p class="card-text"><strong>Precio:</strong> $@p.Precio.ToString("F2")</p>
+                    <p class="card-text"><small class="text-muted">Stock: @p.Cantidad unidades</small></p>
+                    <div class="mt-auto">
+                        <form asp-controller="Tienda" asp-action="AgregarAlCarrito" method="post">
+                            <input type="hidden" name="id" value="@p.Id" />
+                            <input type="hidden" name="cantidad" value="1" />
+                            <button type="submit" class="btn btn-primary w-100">🛒 Agregar al carrito</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="mt-4">
+    <a asp-controller="Tienda" asp-action="Carrito" class="btn btn-success">
+        🧾 Ver carrito
+    </a>
+</div>
