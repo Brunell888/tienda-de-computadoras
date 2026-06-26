@@ -1,0 +1,63 @@
+@model List<LOGIN.Models.CarritoItem>
+@{
+    ViewData["Title"] = "Mi Carrito";
+}
+
+<h2 class="my-4">🧾 Mi Carrito</h2>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-info">@TempData["Mensaje"]</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning">Tu carrito está vacío.</div>
+    <a asp-controller="Tienda" asp-action="Index" class="btn btn-primary">🛒 Ir a la tienda</a>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>$@item.Precio.ToString("F2")</td>
+                    <td>@item.Cantidad</td>
+                    <td>$@item.Subtotal.ToString("F2")</td>
+                    <td>
+                        <form asp-controller="Tienda" asp-action="EliminarDelCarrito" method="post">
+                            <input type="hidden" name="id" value="@item.ProductoId" />
+                            <button type="submit" class="btn btn-danger btn-sm">🗑 Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"><strong>Total</strong></td>
+                <td><strong>$@Model.Sum(i => i.Subtotal).ToString("F2")</strong></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="d-flex gap-2">
+        <a asp-controller="Tienda" asp-action="Index" class="btn btn-primary">🛒 Seguir comprando</a>
+        <form asp-controller="Tienda" asp-action="VaciarCarrito" method="post">
+            <button type="submit" class="btn btn-danger">🗑 Vaciar carrito</button>
+        </form>
+        <button class="btn btn-success">✅ Confirmar compra</button>
+    </div>
+}
