@@ -10,31 +10,54 @@
     <div class="alert alert-success">@TempData["Mensaje"]</div>
 }
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    @foreach (var p in Model)
-    {
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">@p.Nombre</h5>
-                    <p class="card-text text-muted">@p.Descripcion</p>
-                    <p class="card-text"><strong>Precio:</strong> $@p.Precio.ToString("F2")</p>
-                    <p class="card-text"><small class="text-muted">Stock: @p.Cantidad unidades</small></p>
-                    <div class="mt-auto">
-                        <form asp-controller="Tienda" asp-action="AgregarAlCarrito" method="post">
-                            <input type="hidden" name="id" value="@p.Id" />
-                            <input type="hidden" name="cantidad" value="1" />
-                            <button type="submit" class="btn btn-primary w-100">🛒 Agregar al carrito</button>
-                        </form>
-                    </div>
+<form method="get" asp-controller="Tienda" asp-action="Index" class="mb-4">
+    <div class="input-group mb-2">
+        <input type="text" name="busqueda" value="@ViewBag.Busqueda"
+               class="form-control" placeholder="🔍 Buscar producto..." />
+        <button class="btn btn-amarillo" type="submit">Buscar</button>
+        @if (!string.IsNullOrEmpty(ViewBag.Busqueda as string) || (bool)ViewBag.SoloStock)
+        {
+            <a asp-controller="Tienda" asp-action="Index" class="btn btn-outline-secondary">✕ Limpiar</a>
+        }
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" name="soloStock" value="true"
+               id="soloStock" @(ViewBag.SoloStock == true ? "checked" : "")
+               onchange="this.form.submit()" />
+        <label class="form-check-label" for="soloStock" style="color:#ccc">
+            ✅ Solo mostrar productos con stock disponible
+        </label>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No se encontraron productos para "<strong>@ViewBag.Busqueda</strong>".</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var p in Model)
+        {
+            <div class="col">
+                <div class="product-card">
+                    <h5>@p.Nombre</h5>
+                    <p style="color:#888;font-size:0.9rem">@p.Descripcion</p>
+                    <div class="price">$@p.Precio.ToString("F2")</div>
+                    <div class="stock mb-3">Stock: @p.Cantidad unidades</div>
+                    <form asp-controller="Tienda" asp-action="AgregarAlCarrito" method="post">
+                        <input type="hidden" name="id" value="@p.Id" />
+                        <input type="hidden" name="cantidad" value="1" />
+                        <button type="submit" class="btn-amarillo w-100">🛒 Agregar al carrito</button>
+                    </form>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
 
 <div class="mt-4">
-    <a asp-controller="Tienda" asp-action="Carrito" class="btn btn-success">
+    <a asp-controller="Tienda" asp-action="Carrito" class="btn-outline-amarillo">
         🧾 Ver carrito
     </a>
 </div>
