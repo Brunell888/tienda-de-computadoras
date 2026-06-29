@@ -15,15 +15,24 @@ namespace LOGIN.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+       public async Task<IActionResult> Index(string? busqueda, bool soloStock = false)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
-                return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Account");
 
-            var productos = await _context.Productos.Where(p => p.Cantidad > 0).ToListAsync();
-            return View(productos);
+            var query = _context.Productos.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(busqueda))
+            query = query.Where(p => p.Nombre.Contains(busqueda) || p.Descripcion!.Contains(busqueda));
+
+            if (soloStock)
+            query = query.Where(p => p.Cantidad > 0);
+
+            ViewBag.Busqueda = busqueda;
+            ViewBag.SoloStock = soloStock;
+
+            return View(await query.ToListAsync());
         }
-
         public IActionResult Carrito()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
