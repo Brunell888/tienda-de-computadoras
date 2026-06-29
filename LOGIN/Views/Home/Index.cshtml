@@ -2,20 +2,13 @@
     ViewData["Title"] = "Inicio";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card text-center">
-                <div class="card-header bg-info text-white">
-                    <h3>Bienvenido</h3>
-                </div>
-                <div class="card-body">
-                    <h4>¡Hola, @ViewBag.NombreUsuario!</h4>
-                    <p>Has iniciado sesión correctamente.</p>
-                    <hr />
-                    <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Cerrar Sesión</a>
-                </div>
-            </div>
+<!-- HERO -->
+<div class="hero" style="margin: -24px -12px 0; border-radius: 0;">
+    <div>
+        <h1>ENCUENTRA LO QUE BUSCAS<br/>AQUÍ EN TIENDA PC</h1>
+        <div class="hero-btns">
+            <a asp-controller="Tienda" asp-action="Index" class="btn-amarillo">VER TIENDA</a>
+            <a href="https://wa.me/59175906612" target="_blank" class="btn-outline-amarillo">COTIZAR PC</a>
         </div>
     </div>
 </div>
