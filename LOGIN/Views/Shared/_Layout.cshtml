@@ -3,128 +3,146 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LOGIN</title>
+    <title>@ViewData["Title"] - Tienda PC</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- PWA: manifest e iconos -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="manifest" href="~/manifest.webmanifest" />
-    <meta name="theme-color" content="#764ba2" />
-    <link rel="apple-touch-icon" href="~/icons/icon-192.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <style>
-            body {
-                background-color: #f5f5f5;
-                margin-bottom: 60px;
-            }
-
-            .footer {
-                position: absolute;
-                bottom: 0;
-                width: 100%;
-                line-height: 60px;
-                background-color: #f8f9fa;
-            }
-
-            .card {
-                border-radius: 15px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-
-            .btn {
-                border-radius: 25px;
-                padding: 8px 25px;
-            }
-    </style>
+    <meta name="theme-color" content="#f5c400" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">LOGIN</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse">
-                    @{
-                        var usuarioNombre = Context.Session.GetString("UsuarioNombre");
-                    }
-                    @if (!string.IsNullOrEmpty(usuarioNombre))
-                    {
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacidad</a></li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="ProductosView" asp-action="Index">📦 Productos</a>
-                            </li>
-                            <li class="nav-item">
-                               <a class="nav-link" asp-controller="Tienda" asp-action="Index">🛒 Tienda</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Reporte" asp-action="Index">📊 Reporte</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav">
-                            <li class="nav-item"><span class="nav-link">Hola, @usuarioNombre</span></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a></li>
-                        </ul>
-                    }
-                    else
-                    {
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Iniciar Sesión</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register">Registrarse</a></li>
-                        </ul>
-                    }
-                    <button id="btnInstalarPWA" type="button" class="btn btn-sm btn-outline-primary ms-2 d-none">
-                        📲 Instalar App
-                    </button>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-    <footer class="footer text-muted">
-        <div class="container">&copy; 2025 - LOGIN</div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- PWA: registro del Service Worker + boton de instalacion -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then((reg) => console.log('Service Worker registrado:', reg.scope))
-                    .catch((err) => console.error('Error al registrar el Service Worker:', err));
-            });
+@{
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var busquedaActual = Context.Request.Query["busqueda"].ToString();
+}
+
+<!-- ===== NAVBAR PRINCIPAL ===== -->
+<nav class="navbar-cyrex">
+    <div class="container d-flex align-items-center gap-3 flex-wrap">
+
+        <!-- Logo -->
+        <a href="/" class="brand-text me-3">⚡ TIENDA PC</a>
+
+        <!-- Buscador global -->
+        @if (!string.IsNullOrEmpty(usuarioNombre))
+        {
+            <form method="get" asp-controller="Tienda" asp-action="Index" class="flex-grow-1">
+                <input type="text" name="busqueda" value="@busquedaActual"
+                       class="search-box w-100"
+                       placeholder="Escribe para buscar productos..." />
+            </form>
         }
 
-        let deferredInstallPrompt = null;
-        const btnInstalar = document.getElementById('btnInstalarPWA');
+        <!-- Info boxes -->
+        <div class="info-box ms-auto">
+            <span>📞</span>
+            <div>
+                <div style="font-size:0.7rem;color:#888">ASESOR ESPECIALIZADO</div>
+                <span>59175906612</span>
+            </div>
+        </div>
+        <div class="info-box">
+            <span>📦</span>
+            <div>
+                <div style="font-size:0.7rem;color:#888">ENVÍO</div>
+                <span>NACIONAL</span>
+            </div>
+        </div>
+    </div>
+</nav>
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredInstallPrompt = e;
-            btnInstalar?.classList.remove('d-none');
-        });
+<!-- ===== SUBNAV ===== -->
+<div class="subnav">
+    <div class="container">
+        @if (!string.IsNullOrEmpty(usuarioNombre))
+        {
+            <a asp-controller="Home" asp-action="Index">Inicio</a>
+            <a asp-controller="Tienda" asp-action="Index">Tienda</a>
+            <a asp-controller="ProductosView" asp-action="Index">📦 Productos</a>
+            <a asp-controller="Reporte" asp-action="Index">📊 Reporte</a>
+            <span style="color:#555;margin-right:28px">Hola, @usuarioNombre</span>
+            <a asp-controller="Account" asp-action="Logout" style="color:#ff5555">Cerrar Sesión</a>
+        }
+        else
+        {
+            <a asp-controller="Account" asp-action="Login">Iniciar Sesión</a>
+            <a asp-controller="Account" asp-action="Register">Registrarse</a>
+        }
+    </div>
+</div>
 
-        btnInstalar?.addEventListener('click', async () => {
-            if (!deferredInstallPrompt) return;
-            deferredInstallPrompt.prompt();
-            await deferredInstallPrompt.userChoice;
-            deferredInstallPrompt = null;
-            btnInstalar.classList.add('d-none');
-        });
+<!-- ===== CONTENIDO ===== -->
+<div class="container mt-4">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
 
-        window.addEventListener('appinstalled', () => {
-            btnInstalar?.classList.add('d-none');
-        });
-    </script>
+<!-- ===== FOOTER ===== -->
+<footer class="footer-cyrex">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Marca -->
+            <div class="col-md-4">
+                <div class="brand-text">⚡ TIENDA PC</div>
+                <p>Tienda tecnológica especializada en componentes, periféricos y hardware para setups modernos.</p>
+            </div>
+            <!-- Links -->
+            <div class="col-md-4">
+                <h6>Tienda</h6>
+                <ul>
+                    <li><a asp-controller="Home" asp-action="Index">Inicio</a></li>
+                    <li><a asp-controller="Tienda" asp-action="Index">Tienda</a></li>
+                    <li><a asp-controller="ProductosView" asp-action="Index">Productos</a></li>
+                    <li><a asp-controller="Reporte" asp-action="Index">Reporte</a></li>
+                </ul>
+            </div>
+            <!-- Contacto -->
+            <div class="col-md-4">
+                <h6>Contacto</h6>
+                <p>Consulta disponibilidad, stock y precios actualizados.</p>
+                <a href="https://wa.me/59175906612" target="_blank" class="btn-whatsapp">
+                    💬 Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
 
-    @await RenderSectionAsync("Scripts", required: false)
+        <!-- Features row -->
+        <div class="row g-3 mt-4">
+            <div class="col-md-3">
+                <div class="feature-card">
+                    <h6>✅ Stock verificado</h6>
+                    <p>Consulta disponibilidad antes de comprar.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card">
+                    <h6>🧑‍💼 Asesor directo</h6>
+                    <p>Atención personalizada para tu compra.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card">
+                    <h6>🚚 Envío nacional</h6>
+                    <p>Cobertura a nivel nacional.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card">
+                    <h6>🛡️ Garantía</h6>
+                    <p>Soporte claro y responsable.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom d-flex justify-content-between">
+            <span>© 2026 Tienda PC</span>
+            <span>Hardware, tecnología y soporte especializado.</span>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
