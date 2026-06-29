@@ -45,11 +45,19 @@ else
                     <p style="color:#888;font-size:0.9rem">@p.Descripcion</p>
                     <div class="price">$@p.Precio.ToString("F2")</div>
                     <div class="stock mb-3">Stock: @p.Cantidad unidades</div>
-                    <form asp-controller="Tienda" asp-action="AgregarAlCarrito" method="post">
-                        <input type="hidden" name="id" value="@p.Id" />
-                        <input type="hidden" name="cantidad" value="1" />
-                        <button type="submit" class="btn-amarillo w-100">🛒 Agregar al carrito</button>
-                    </form>
+                    @if (p.Cantidad > 0)
+                    {
+                        <form asp-controller="Tienda" asp-action="AgregarAlCarrito" method="post" class="d-flex gap-2 align-items-center">
+                            <input type="hidden" name="id" value="@p.Id" />
+                            <input type="number" name="cantidad" value="1" min="1" max="@p.Cantidad"
+                                   class="form-control form-control-sm" style="width:80px" />
+                            <button type="submit" class="btn-amarillo flex-grow-1">🛒 Agregar</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn-amarillo w-100" disabled>❌ Sin stock</button>
+                    }
                 </div>
             </div>
         }
