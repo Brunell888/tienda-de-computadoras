@@ -61,6 +61,33 @@ a:hover { color: #ffd700; }
 }
 .navbar-cyrex .search-box::placeholder { color: #888; }
 .navbar-cyrex .search-box:focus { outline: none; border-color: #ffd700; background: #1a1a1a; }
+.btn-mic {
+    background: #1e1e1e;
+    border: 1.5px solid #f5c400;
+    border-radius: 50%;
+    color: #f5c400;
+    width: 42px;
+    height: 42px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.btn-mic:hover { background: #f5c400; color: #000; }
+.btn-mic.escuchando {
+    background: #ff5555;
+    border-color: #ff5555;
+    color: #fff;
+    animation: pulso 1s infinite;
+}
+@keyframes pulso {
+    0% { box-shadow: 0 0 0 0 rgba(255,85,85,0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(255,85,85,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,85,85,0); }
+}
 
 .navbar-cyrex .info-box {
     display: flex;
