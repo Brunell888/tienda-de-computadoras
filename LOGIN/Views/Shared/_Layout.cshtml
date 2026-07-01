@@ -146,6 +146,58 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const btnVoz = document.getElementById('btnVoz');
+    const inputBusqueda = document.getElementById('busquedaInput');
+
+    if (!btnVoz) return;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        btnVoz.style.display = 'none';
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    let escuchando = false;
+
+    btnVoz.addEventListener('click', function () {
+        if (escuchando) {
+            recognition.stop();
+            return;
+        }
+        recognition.start();
+    });
+
+    recognition.onstart = function () {
+        escuchando = true;
+        btnVoz.classList.add('escuchando');
+        btnVoz.textContent = '🔴';
+    };
+
+    recognition.onresult = function (event) {
+        const texto = event.results[0][0].transcript;
+        inputBusqueda.value = texto;
+        inputBusqueda.form.submit();
+    };
+
+    recognition.onerror = function (event) {
+        console.error('Error de reconocimiento de voz:', event.error);
+    };
+
+    recognition.onend = function () {
+        escuchando = false;
+        btnVoz.classList.remove('escuchando');
+        btnVoz.textContent = '🎤';
+    };
+});
+</script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
