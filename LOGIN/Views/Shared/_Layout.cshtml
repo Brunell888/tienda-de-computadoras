@@ -26,10 +26,13 @@
         <!-- Buscador global -->
         @if (!string.IsNullOrEmpty(usuarioNombre))
         {
-            <form method="get" asp-controller="Tienda" asp-action="Index" class="flex-grow-1">
-                <input type="text" name="busqueda" value="@busquedaActual"
+            <form method="get" asp-controller="Tienda" asp-action="Index" class="flex-grow-1 d-flex align-items-center gap-2">
+                <input type="text" id="busquedaInput" name="busqueda" value="@busquedaActual"
                        class="search-box w-100"
-                       placeholder="Escribe para buscar productos..." />
+                       placeholder="Escribe o habla para buscar productos..." />
+                <button type="button" id="btnVoz" class="btn-mic" title="Buscar por voz">
+                    🎤
+                </button>
             </form>
         }
 
