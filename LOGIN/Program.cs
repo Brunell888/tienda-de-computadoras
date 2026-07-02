@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using LOGIN.Data;
 
 AppContext.SetSwitch("System.Net.DisableIPv6", true);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +13,11 @@ builder.Services.AddControllers(); // ← NUEVO para la API
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddDataProtection()
     .PersistKeysToDbContext<ApplicationDbContext>()
     .SetApplicationName("TiendaPC");
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -22,7 +25,9 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
 builder.Services.AddHostedService<LOGIN.Services.BackupService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
