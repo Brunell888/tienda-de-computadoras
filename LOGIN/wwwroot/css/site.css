@@ -147,6 +147,16 @@ a:hover { color: #ffd700; }
 }
 .feature-card h6 { color: #fff; font-weight: 700; margin-bottom: 6px; }
 .feature-card p { color: #888; font-size: 0.85rem; margin: 0; }
+.feature-card-link {
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+.feature-card-link:hover .feature-card {
+    border-color: #f5c400;
+    transform: translateY(-2px);
+}
 
 /* ===== PRODUCT CARDS ===== */
 .product-card {
