@@ -19,7 +19,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
+builder.Services.AddHostedService<LOGIN.Services.BackupService>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
