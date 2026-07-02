@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using LOGIN.Data;
 
