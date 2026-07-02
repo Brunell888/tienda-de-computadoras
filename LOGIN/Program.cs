@@ -12,6 +12,9 @@ builder.Services.AddControllers(); // ← NUEVO para la API
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDataProtection()
+    .PersistKeysToDbContext<ApplicationDbContext>()
+    .SetApplicationName("TiendaPC");
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
