@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using LOGIN.Models;
 
 namespace LOGIN.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext, IDataProtectionKeyContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -12,6 +13,7 @@ namespace LOGIN.Data
 
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Producto> Productos { get; set; } // ← NUEVO
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } // ← NUEVO
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
